@@ -1,7 +1,7 @@
 .idea
 __pycache__
 /dataset/*
-!/dataset/README.md
+!/dataset/test/
 /original_dataset/*
 !/original_dataset/README.md
 # /saved_model/*
