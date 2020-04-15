@@ -147,7 +147,8 @@ if __name__ == '__main__':
         step = 0
         for features in train_dataset:
             step += 1
-            images, labels = process_features(features, data_augmentation=True)
+            # images, labels = process_features(features, data_augmentation=True)
+            images, labels = process_features(features, data_augmentation=False)
             train_step(images, labels)
             print("Epoch: {}/{}, step: {}/{}, loss: {:.5f}, accuracy: {:.5f}".format(epoch,
                                                                                      EPOCHS,
@@ -172,8 +173,8 @@ if __name__ == '__main__':
         valid_loss.reset_states()
         valid_accuracy.reset_states()
 
-        if epoch % save_every_n_epoch == 0:
-            model.save_weights(filepath=save_model_dir+"epoch-{}".format(epoch), save_format='tf')
+        # if epoch % save_every_n_epoch == 0:
+        #     model.save_weights(filepath=save_model_dir+"epoch-{}".format(epoch), save_format='tf')
 
 
     # save weights

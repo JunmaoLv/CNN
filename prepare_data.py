@@ -7,7 +7,7 @@ from parse_tfrecord import get_parsed_dataset
 
 def load_and_preprocess_image(image_raw, data_augmentation=False):
     # decode
-    image_tensor = tf.io.decode_image(contents=image_raw, channels=CHANNELS, dtype=tf.dtypes.float32)
+    image_tensor = tf.io.decode_image(contents=image_raw, channels=CHANNELS, dtype=tf.dtypes.float32) / 255.
 
     if data_augmentation:
         image = tf.image.random_flip_left_right(image=image_tensor)
@@ -38,7 +38,7 @@ def get_images_and_labels(data_root_dir):
 
 def get_the_length_of_dataset(dataset):
     count = 0
-    for i in dataset:
+    for _ in dataset:
         count += 1
     return count
 

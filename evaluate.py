@@ -15,7 +15,8 @@ if __name__ == '__main__':
     train_dataset, valid_dataset, test_dataset, train_count, valid_count, test_count = generate_datasets()
     # load the model
     model = get_model()
-    model.load_weights(filepath=save_model_dir)
+    # model.load_weights(filepath=save_model_dir)
+    model.load_weights(filepath=save_model_dir+"model")
     # model = tf.saved_model.load(save_model_dir)
 
     # Get the accuracy on the test set

@@ -3,6 +3,7 @@ from configuration import train_dir, valid_dir, test_dir, train_tfrecord, valid_
 from prepare_data import get_images_and_labels
 import random
 
+
 # convert a value to a type compatible tf.train.Feature
 def _bytes_feature(value):
     # Returns a bytes_list from a string / byte.

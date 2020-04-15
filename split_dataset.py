@@ -3,6 +3,7 @@ import random
 import shutil
 from configuration import TRAIN_SET_RATIO, TEST_SET_RATIO
 
+
 class SplitDataset():
     def __init__(self, dataset_dir, saved_dataset_dir, train_ratio=TRAIN_SET_RATIO, test_ratio=TEST_SET_RATIO, show_progress=False):
         self.dataset_dir = dataset_dir
@@ -11,7 +12,6 @@ class SplitDataset():
         self.saved_valid_dir = saved_dataset_dir + "/valid/"
         self.saved_test_dir = saved_dataset_dir + "/test/"
 
-
         self.train_ratio = train_ratio
         self.test_radio = test_ratio
         self.valid_ratio = 1 - train_ratio - test_ratio
@@ -19,6 +19,7 @@ class SplitDataset():
         self.train_file_path = []
         self.valid_file_path = []
         self.test_file_path = []
+        # train_file_path 的列表元素是列表-[字典的key, 字典的value], key是index对应的种类名称, value是index对应的种类的文件路径
 
         self.index_label_dict = {}
 
@@ -31,10 +32,10 @@ class SplitDataset():
         if not os.path.exists(self.saved_valid_dir):
             os.mkdir(self.saved_valid_dir)
 
-
     def __get_label_names(self):
         label_names = []
         for item in os.listdir(self.dataset_dir):
+            # 列出dataset下所有的文件夹，判断是文件夹则作为一个label
             item_path = os.path.join(self.dataset_dir, item)
             if os.path.isdir(item_path):
                 label_names.append(item)
@@ -42,13 +43,17 @@ class SplitDataset():
 
     def __get_all_file_path(self):
         all_file_path = []
+        # all_file_path 的列表元素还是一个列表-file_path.
         index = 0
         for file_type in self.__get_label_names():
+            # 把index与种类对应起来，形成一个字典
             self.index_label_dict[index] = file_type
             index += 1
             type_file_path = os.path.join(self.dataset_dir, file_type)
+            # file_path 列表存放一个种类所有文件的路径
             file_path = []
             for file in os.listdir(type_file_path):
+                # 列出各个种类文件夹下的所有文件，并把他们的路径加入一个列表
                 single_file_path = os.path.join(type_file_path, file)
                 file_path.append(single_file_path)
             all_file_path.append(file_path)
@@ -56,7 +61,7 @@ class SplitDataset():
 
     def __copy_files(self, type_path, type_saved_dir):
         for item in type_path:
-            src_path_list = item[1]
+            src_path_list = item[1]     # item 是一个列表，第一个元素是index对应的种类名称, 第二个元素是一个存放文件路径的列表
             dst_path = type_saved_dir + "%s/" % (item[0])
             if not os.path.exists(dst_path):
                 os.mkdir(dst_path)
