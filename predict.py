@@ -1,5 +1,5 @@
 import tensorflow as tf
-from configuration import save_model_dir, test_image_dir
+from configuration import save_model_dir, test_image_dir, model_index, EPOCHS, model_name_list
 from prepare_data import load_and_preprocess_image
 from train import get_model
 import os
@@ -46,14 +46,20 @@ if __name__ == '__main__':
     # load the model
     model_create_start_time = timer()
     model = get_model()
-    model.load_weights(filepath=save_model_dir+"model")
+    # model.load_weights(filepath=save_model_dir+"model")
+    # model.load_weights(filepath=save_model_dir+"model_index-"+'{}-epochs-{}'.format(model_index, EPOCHS))
+    model.load_weights(filepath=save_model_dir+'{}/{}-epochs-{}'.format(model_name_list[model_index],
+                                                                        model_name_list[model_index], EPOCHS))
     model_create_end_time = timer()
+
+
     print('model create spend : {} seconds'.format(model_create_end_time - model_create_start_time))
 
     # pred_class = get_single_picture_prediction(model, test_image_dir)
     model_predict_start_time = timer()
     pred_class_name = get_list_picture_prediction(model, test_image_dir + 'no_defect/')
     model_predict_end_time = timer()
-    print('every predict spend : {} seconds'.format((model_predict_end_time - model_predict_start_time)
-                                                    / len(pred_class_name)))
+    # print('every predict spend : {} seconds'.format((model_predict_end_time - model_predict_start_time)
+    #                                                 / len(pred_class_name)))
+    print('5 predict spend : {} seconds'.format(model_predict_end_time - model_predict_start_time))
     print(pred_class_name)
