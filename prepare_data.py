@@ -1,7 +1,9 @@
 import tensorflow as tf
 import pathlib
+import matplotlib.pyplot as plt
+import numpy as np
 from configuration import IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS, \
-    BATCH_SIZE, train_tfrecord, valid_tfrecord, test_tfrecord
+    BATCH_SIZE, train_tfrecord, valid_tfrecord, test_tfrecord, model_name_list, model_index, EPOCHS
 from parse_tfrecord import get_parsed_dataset
 
 
@@ -58,3 +60,30 @@ def generate_datasets():
     test_dataset = test_dataset.batch(batch_size=BATCH_SIZE)
 
     return train_dataset, valid_dataset, test_dataset, train_count, valid_count, test_count
+
+
+def show_history_curve(train_loss_array, train_accuracy_array, valid_loss_array, valid_accuracy_array,
+                       epochs, network_title):
+    plt.figure()
+    x = np.linspace(1, epochs, num=epochs, endpoint=True)
+    # print(x)
+    plt.plot(x, train_loss_array, color='red', label='train loss')
+    plt.plot(x, train_accuracy_array, color='red', linestyle='--', label='train acc')
+    plt.plot(x, valid_loss_array, color='blue', label='valid loss')
+    plt.plot(x, valid_accuracy_array, color='blue', linestyle='--', label='valid acc')
+    plt.xlabel('epoch')
+    plt.ylabel('accuracy and loss')
+    plt.title(network_title)
+    plt.legend()
+    plt.savefig('saved_train_history_picture/{}.png'.format(network_title), dpi=500)
+    plt.show()
+
+
+if __name__ == '__main__':
+    # test the show history curve function
+    train_loss_array = np.random.randn(10)
+    train_accuracy_array = np.random.randn(10)
+    valid_loss_array = np.random.randn(10)
+    valid_accuracy_array = np.random.randn(10)
+    show_history_curve(train_loss_array, train_accuracy_array, valid_loss_array, valid_accuracy_array,
+                       EPOCHS, 'train history of {}-epochs-{}'.format(model_name_list[model_index], EPOCHS))
