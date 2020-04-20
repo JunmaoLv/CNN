@@ -1,5 +1,7 @@
+import os
+import pickle
 # some training parameters
-EPOCHS = 10
+EPOCHS = 8
 BATCH_SIZE = 16
 NUM_CLASSES = 2
 IMAGE_HEIGHT = 224
@@ -20,6 +22,14 @@ test_tfrecord = dataset_dir + "test.tfrecord"
 # VALID_SET_RATIO = 1 - TRAIN_SET_RATIO - TEST_SET_RATIO
 TRAIN_SET_RATIO = 0.6
 TEST_SET_RATIO = 0.2
+
+model_name_list = ['mobilenet_v1', 'mobilenet_v2', 'mobilenet_v3_large', 'mobilenet_v3_small', 'efficient_net_b0',
+                    'efficient_net_b1', 'efficient_net_b2', 'efficient_net_b3', 'efficient_net_b4', 'efficient_net_b5',
+                    'efficient_net_b6', 'efficient_net_b7', 'ResNeXt50', 'ResNeXt101', 'InceptionV4',
+                   'InceptionResNetV1', 'InceptionResNetV2', 'SE_ResNet_50', 'SE_ResNet_101', 'SE_ResNet_152',
+                   'SqueezeNet', 'DenseNet_121', 'DenseNet_169', 'DenseNet_201', 'DenseNet_269', 'ShuffleNetV2_0.5',
+                   'ShuffleNetV2_1', 'ShuffleNetV2_1.5', 'ShuffleNetV2_2', 'ResNet_18', 'ResNet_34', 'ResNet_50',
+                   'ResNet_101', 'ResNet_152']
 
 # choose a network
 # 0: mobilenet_v1, 1: mobilenet_v2, 2: mobilenet_v3_large, 3: mobilenet_v3_small
@@ -42,5 +52,11 @@ TEST_SET_RATIO = 0.2
 # b5 = (1.6, 2.2, 456, 0.4)
 # b6 = (1.8, 2.6, 528, 0.5)
 # b7 = (2.0, 3.1, 600, 0.5)
-model_index = 29
+model_index = 30
 
+if __name__ == '__main__':
+    # print(save_model_dir+'{}/{}-epochs-{}'.format(model_name_list[model_index], model_name_list[model_index], EPOCHS))
+    # filepath = save_model_dir + '{}/'.format(model_name_list[model_index])
+    # if not os.path.exists(filepath):
+    #     os.makedirs(filepath)
+    pass
