@@ -1,8 +1,10 @@
 from __future__ import absolute_import, division, print_function
 import tensorflow as tf
+import os
+import pickle
 from configuration import IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS, \
-    EPOCHS, BATCH_SIZE, save_model_dir, model_index, save_every_n_epoch
-from prepare_data import generate_datasets, load_and_preprocess_image
+    EPOCHS, BATCH_SIZE, save_model_dir, model_index, model_name_list
+from prepare_data import generate_datasets, load_and_preprocess_image, show_history_curve
 import math
 from models import mobilenet_v1, mobilenet_v2, mobilenet_v3_large, mobilenet_v3_small, \
     efficientnet, resnext, inception_v4, inception_resnet_v1, inception_resnet_v2, \
@@ -123,6 +125,12 @@ if __name__ == '__main__':
     valid_loss = tf.keras.metrics.Mean(name='valid_loss')
     valid_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='valid_accuracy')
 
+    # define the history array
+    train_loss_array = []
+    train_accuracy_array = []
+    valid_loss_array = []
+    valid_accuracy_array = []
+
     # @tf.function
     def train_step(image_batch, label_batch):
         with tf.GradientTape() as tape:
@@ -150,7 +158,7 @@ if __name__ == '__main__':
             # images, labels = process_features(features, data_augmentation=True)
             images, labels = process_features(features, data_augmentation=False)
             train_step(images, labels)
-            print("Epoch: {}/{}, step: {}/{}, loss: {:.5f}, accuracy: {:.5f}".format(epoch,
+            print("Epoch: {}/{}, step: {}/{}, loss: {:.5f}, accuracy: {:.5f}".format(epoch+1,
                                                                                      EPOCHS,
                                                                                      step,
                                                                                      math.ceil(train_count / BATCH_SIZE),
@@ -162,12 +170,17 @@ if __name__ == '__main__':
             valid_step(valid_images, valid_labels)
 
         print("Epoch: {}/{}, train loss: {:.5f}, train accuracy: {:.5f}, "
-              "valid loss: {:.5f}, valid accuracy: {:.5f}".format(epoch,
+              "valid loss: {:.5f}, valid accuracy: {:.5f}".format(epoch+1,
                                                                   EPOCHS,
                                                                   train_loss.result().numpy(),
                                                                   train_accuracy.result().numpy(),
                                                                   valid_loss.result().numpy(),
                                                                   valid_accuracy.result().numpy()))
+        train_loss_array.append(train_loss.result().numpy())
+        train_accuracy_array.append(train_accuracy.result().numpy())
+        valid_loss_array.append(valid_loss.result().numpy())
+        valid_accuracy_array.append(valid_accuracy.result().numpy())
+
         train_loss.reset_states()
         train_accuracy.reset_states()
         valid_loss.reset_states()
@@ -176,9 +189,25 @@ if __name__ == '__main__':
         # if epoch % save_every_n_epoch == 0:
         #     model.save_weights(filepath=save_model_dir+"epoch-{}".format(epoch), save_format='tf')
 
-
     # save weights
-    model.save_weights(filepath=save_model_dir+"model", save_format='tf')
+    filepath = save_model_dir + '{}/'.format(model_name_list[model_index])
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+    model.save_weights(filepath=filepath+'{}-epochs-{}'.format(model_name_list[model_index], EPOCHS),
+                       save_format='tf')
+
+    # save the train history to pickle file
+    pickle_path = 'saved_history_data/'
+    if not os.path.exists(pickle_path):
+        os.makedirs(pickle_path)
+    history_array = [train_loss_array, train_accuracy_array, valid_loss_array, valid_accuracy_array]
+    with open(pickle_path + '{}-epochs-{}'.format(model_name_list[model_index], EPOCHS), 'wb') as pickle_file:
+        pickle.dump(history_array, pickle_file)
+
+    # show the train curve
+    show_history_curve(train_loss_array, train_accuracy_array,
+                       valid_loss_array, valid_accuracy_array,
+                       EPOCHS, 'train history of {}-epochs-{}'.format(model_name_list[model_index], EPOCHS))
 
     # save the whole model
     # tf.saved_model.save(model, save_model_dir)
