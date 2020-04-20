@@ -1,8 +1,10 @@
 .idea
 __pycache__
 /dataset/*
-!/dataset/test/
+# !/dataset/test/
 /original_dataset/*
 !/original_dataset/README.md
-# /saved_model/*
-# /saved_model/README.md
+/saved_model/*
+!/saved_model/README.md
+/saved_train_history_picture/*
+!/saved_train_history_picture/README.md
