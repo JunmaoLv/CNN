@@ -116,14 +116,17 @@ if __name__ == '__main__':
     print_model_summary(network=model)
 
     # define loss and optimizer
-    loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
-    optimizer = tf.keras.optimizers.RMSprop()
+    # loss_object = tf.keras.losses.SparseCategoricalCrossentropy()
+    loss_object = tf.keras.losses.BinaryCrossentropy()
+    # optimizer = tf.keras.optimizers.RMSprop()
+    optimizer = tf.keras.optimizers.Adam()
 
     train_loss = tf.keras.metrics.Mean(name='train_loss')
-    train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='train_accuracy')
+    # train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='train_accuracy')
+    train_accuracy = tf.keras.metrics.BinaryAccuracy(name='train_accuracy')
 
     valid_loss = tf.keras.metrics.Mean(name='valid_loss')
-    valid_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='valid_accuracy')
+    valid_accuracy = tf.keras.metrics.BinaryAccuracy(name='valid_accuracy')
 
     # define the history array
     train_loss_array = []
