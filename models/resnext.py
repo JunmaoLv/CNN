@@ -1,6 +1,6 @@
 import tensorflow as tf
 from models.resnext_block import build_ResNeXt_block
-from configuration import NUM_CLASSES
+from configuration import NUM_CLASSES, IMAGE_WIDTH, IMAGE_HEIGHT, CHANNELS
 
 
 class ResNeXt(tf.keras.Model):
@@ -61,3 +61,12 @@ def ResNeXt50():
 def ResNeXt101():
     return ResNeXt(repeat_num_list=[3, 4, 23, 3],
                    cardinality=32)
+
+def print_model_summary(network):
+    network.build(input_shape=(None, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS))
+    network.summary()
+
+
+if __name__ == '__main__':
+    model = ResNeXt101()
+    print_model_summary(model)

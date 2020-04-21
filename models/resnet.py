@@ -1,5 +1,5 @@
 import tensorflow as tf
-from configuration import NUM_CLASSES
+from configuration import NUM_CLASSES, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS
 from models.residual_block import make_basic_block_layer, make_bottleneck_layer
 
 
@@ -106,3 +106,13 @@ def resnet_101():
 
 def resnet_152():
     return ResNetTypeII(layer_params=[3, 8, 36, 3])
+
+
+def print_model_summary(network):
+    network.build(input_shape=(None, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS))
+    network.summary()
+
+
+if __name__ == '__main__':
+    model = resnet_101()
+    print_model_summary(model)
