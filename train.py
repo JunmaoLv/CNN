@@ -208,9 +208,9 @@ if __name__ == '__main__':
         pickle.dump(history_array, pickle_file)
 
     # show the train curve
-    show_history_curve(train_loss_array, train_accuracy_array,
-                       valid_loss_array, valid_accuracy_array,
-                       EPOCHS, 'train history of {}-epochs-{}'.format(model_name_list[model_index], EPOCHS))
+    # show_history_curve(train_loss_array, train_accuracy_array,
+    #                   valid_loss_array, valid_accuracy_array,
+    #                   EPOCHS, 'train history of {}-epochs-{}'.format(model_name_list[model_index], EPOCHS))
 
     # save the whole model
     # tf.saved_model.save(model, save_model_dir)
